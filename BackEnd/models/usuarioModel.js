@@ -1,6 +1,7 @@
 const DAO = require('./dao');
 const db = new DAO().getDb();
 const { v4: uuidv4 } = require('uuid');
+const bcrypt = require('bcrypt');
 
 class UsuarioModel {
   async obtenerTodos() {
@@ -15,7 +16,8 @@ class UsuarioModel {
       VALUES ($1, $2, $3, $4, $5, $6, CURRENT_DATE)
       RETURNING id, nombre, email, telefono, rol
     `;
-    const params = [id, data.nombre, data.email, data.telefono, data.contrasena || '', data.rol || 'cliente'];
+    const hash = await bcrypt.hash(data.contrasena || '', 10);
+    const params = [id, data.nombre, data.email, data.telefono, hash, data.rol || 'cliente'];
     const usuario = await db.one(sql, params);
     return usuario;
   }

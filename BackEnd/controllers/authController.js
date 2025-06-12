@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const { v4: uuidv4 } = require('uuid');
 const DAO = require('../models/dao');
 const dao = new DAO();
@@ -23,10 +24,11 @@ module.exports = {
 
         const id = uuidv4();
         const rol = 'cliente';
+        const hash = await bcrypt.hash(contrasena, 10);
         await t.none(
           `INSERT INTO Usuario (id, nombre, email, telefono, contrasena, rol, created_at)
            VALUES ($1, $2, $3, $4, $5, $6, CURRENT_DATE)`,
-          [id, nombre, email, telefono, contrasena, rol]
+          [id, nombre, email, telefono, hash, rol]
         );
 
         return { id, nombre, email, rol };
@@ -43,16 +45,21 @@ module.exports = {
   login: async (req, res) => {
     try {
       const { email, contrasena } = req.body;
-      const result = await db.consultar('SELECT * FROM Usuario WHERE email = $1 AND contrasena = $2', [email, contrasena]);
-      if (result.length === 0) {
+      const rows = await db.consultar('SELECT * FROM Usuario WHERE email = $1', [email]);
+      if (rows.length === 0) {
+        return res.status(401).json({ error: 'Credenciales inválidas' });
+      }
+
+      const coincide = await bcrypt.compare(contrasena, rows[0].contrasena);
+      if (!coincide) {
         return res.status(401).json({ error: 'Credenciales inválidas' });
       }
 
       const usuario = {
-        id: result[0].id,
-        nombre: result[0].nombre,
-        email: result[0].email,
-        rol: result[0].rol
+        id: rows[0].id,
+        nombre: rows[0].nombre,
+        email: rows[0].email,
+        rol: rows[0].rol
       };
       const token = generarToken(usuario);
       res.json({ usuario, token });
