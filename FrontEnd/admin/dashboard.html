@@ -59,21 +59,12 @@
     </footer>
 
     <!-- Carga los scripts globales de cada módulo -->
+    <script src="navbarAdmin.js"></script>
     <script src="../public/js/adminUsuarios.js"></script>
     <script src="../public/js/adminLugares.js"></script>
     <script src="../public/js/adminCategorias.js"></script>
 
     <script>
-      // Seguridad: solo admins
-      const usuario = JSON.parse(localStorage.getItem("usuario"));
-      if (!usuario || usuario.rol !== "admin") {
-        window.location.href = "/";
-      }
-      // Logout
-      document.getElementById("cerrarSesionBtn").onclick = () => {
-        localStorage.clear();
-        window.location.href = "auth.html";
-      };
 
       // Sidebar dinámico
       const sidebarLinks = document.querySelectorAll("#sidebar nav a");

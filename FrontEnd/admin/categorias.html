@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin - Categorías</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+  <nav class="bg-blue-800 shadow text-white sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+      <h1 class="text-2xl font-bold cursor-pointer" onclick="location.href='dashboard.html'">
+        GesEven <span class="text-base bg-blue-600 px-2 py-1 rounded ml-2">Admin</span>
+      </h1>
+      <button id="cerrarSesionBtn" class="bg-red-600 px-4 py-2 rounded hover:bg-red-700 font-semibold">
+        Cerrar sesión
+      </button>
+    </div>
+  </nav>
+
+  <main class="flex-grow p-8">
+    <h2 class="text-3xl font-extrabold text-blue-800 mb-6">🗂️ Gestión de Categorías</h2>
+    <div id="moduloContenido"></div>
+  </main>
+
+  <footer class="bg-gray-900 text-white text-center py-6 mt-auto">
+    <p>&copy; 2025 GesEven. Todos los derechos reservados.</p>
+  </footer>
+
+  <script src="navbarAdmin.js"></script>
+  <script src="../public/js/adminCategorias.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', window.cargarModuloCategorias);
+  </script>
+</body>
+</html>
