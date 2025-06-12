@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
 const DAO = require('../models/dao');
-const db = new DAO();
+const dao = new DAO();
+const db = dao.getDb();
 
 const SECRET = 'CLAVESECRETA';
 
@@ -14,19 +15,23 @@ module.exports = {
     try {
       const { nombre, email, telefono, contrasena } = req.body;
 
-      const existe = await db.consultar('SELECT * FROM Usuario WHERE email = $1', [email]);
-      if (existe.length > 0) {
-        return res.status(400).json({ error: 'El usuario ya existe' });
-      }
+      const usuario = await db.tx(async t => {
+        const existe = await t.any('SELECT 1 FROM Usuario WHERE email = $1', [email]);
+        if (existe.length > 0) {
+          throw new Error('El usuario ya existe');
+        }
 
-      const id = uuidv4();
-      const rol = 'cliente';
-      await db.consultar(`
-        INSERT INTO Usuario (id, nombre, email, telefono, contrasena, rol, created_at)
-        VALUES ($1, $2, $3, $4, $5, $6, CURRENT_DATE)
-      `, [id, nombre, email, telefono, contrasena, rol]);
+        const id = uuidv4();
+        const rol = 'cliente';
+        await t.none(
+          `INSERT INTO Usuario (id, nombre, email, telefono, contrasena, rol, created_at)
+           VALUES ($1, $2, $3, $4, $5, $6, CURRENT_DATE)`,
+          [id, nombre, email, telefono, contrasena, rol]
+        );
 
-      const usuario = { id, nombre, email, rol };
+        return { id, nombre, email, rol };
+      });
+
       const token = generarToken(usuario);
       res.json({ usuario, token });
     } catch (err) {
