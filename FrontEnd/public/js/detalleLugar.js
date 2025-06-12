@@ -48,13 +48,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
       }
 
-      const resp = await fetch(`${API_BASE}/${lugarId}/resena`, {
+      const resp = await fetch('/api/resenas', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + token
         },
-        body: JSON.stringify({ puntuacion, comentario })
+        body: JSON.stringify({ lugar_id: lugarId, puntuacion, comentario })
       });
 
       if (resp.ok) {
@@ -76,7 +76,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 function mostrarDatosLugar(lugar) {
   document.getElementById("tituloLugarHeader").textContent = lugar.titulo || "Detalle del Lugar";
-  document.getElementById("imagenPrincipal").src = lugar.url || "https://via.placeholder.com/800x400?text=Sin+imagen";
+  const imgSrc = lugar.url && lugar.url.trim() !== '' ? encodeURI(lugar.url) :
+    "https://via.placeholder.com/800x400?text=Sin+imagen";
+  document.getElementById("imagenPrincipal").src = imgSrc;
   document.getElementById("textoDescripcion").textContent = lugar.descripcion;
   document.getElementById("propietarioNombre").textContent = lugar.propietario;
   document.getElementById("propietarioTelefono").textContent = lugar.propietario_telefono || "-";

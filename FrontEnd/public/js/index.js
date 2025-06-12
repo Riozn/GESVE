@@ -18,7 +18,7 @@ function mostrarDatosLugares(data) {
     card.setAttribute('data-precio', lugar.precio != null ? lugar.precio : '0');
 
     const imagenSrc = lugar.url && lugar.url.trim() !== ''
-      ? lugar.url
+      ? encodeURI(lugar.url)
       : 'https://via.placeholder.com/400x250?text=Sin+imagen';
 
     card.innerHTML = `
