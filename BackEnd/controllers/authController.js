@@ -5,7 +5,7 @@ const DAO = require('../models/dao');
 const dao = new DAO();
 const db = dao.getDb();
 
-const SECRET = 'CLAVESECRETA';
+const SECRET = process.env.JWT_SECRET || 'CLAVESECRETA';
 
 function generarToken(usuario) {
   return jwt.sign({ id: usuario.id, nombre: usuario.nombre, rol: usuario.rol }, SECRET, { expiresIn: '2h' });
