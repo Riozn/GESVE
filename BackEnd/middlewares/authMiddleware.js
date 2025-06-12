@@ -1,8 +1,14 @@
 const jwt = require('jsonwebtoken');
-const SECRET = 'CLAVESECRETA';
+const SECRET = process.env.JWT_SECRET || 'CLAVESECRETA';
+
+function getToken(req) {
+  const header = req.headers.authorization || '';
+  const parts = header.split(' ');
+  return parts.length === 2 ? parts[1] : header;
+}
 
 module.exports = (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1];
+  const token = getToken(req);
   if (!token) return res.status(401).json({ error: 'Token no proporcionado' });
 
   try {
