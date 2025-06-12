@@ -5,13 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Panel de Administración - GesEven</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      @media (min-width: 768px) {
-        #sidebar {
-          min-width: 220px;
-        }
-      }
-    </style>
+  <link rel="stylesheet" href="../css/main.css">
   </head>
   <body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
     <!-- Navbar superior -->
@@ -67,17 +61,9 @@
     <script src="../public/js/adminTipos.js"></script>
     <script src="../public/js/adminPagos.js"></script>
 
+    <script src="navbarAdmin.js"></script>
     <script>
-      // Seguridad: solo admins
-      const usuario = JSON.parse(localStorage.getItem("usuario"));
-      if (!usuario || usuario.rol !== "admin") {
-        window.location.href = "/";
-      }
-      // Logout
-      document.getElementById("cerrarSesionBtn").onclick = () => {
-        localStorage.clear();
-        window.location.href = "auth.html";
-      };
+      window.setupAdmin();
 
       // Sidebar dinámico
       const sidebarLinks = document.querySelectorAll("#sidebar nav a");
