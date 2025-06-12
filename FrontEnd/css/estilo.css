@@ -1,7 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
 body {
   background-color: #f8f9fa;
+  font-family: 'Inter', sans-serif;
 }
-.card-title {
-  font-weight: bold;
+
+.navbar-grad {
+  background-image: linear-gradient(to right, #1e3a8a, #3b82f6);
+  color: #ffffff;
+}
+
+.tarjeta-lugar {
+  background-color: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(4px);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.tarjeta-lugar:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
 }

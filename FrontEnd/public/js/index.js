@@ -11,7 +11,7 @@ function mostrarDatosLugares(data) {
   data.forEach((lugar) => {
     const card = document.createElement('a');
     card.href = `lugar.html?id=${encodeURIComponent(lugar.id)}`;
-    card.className = 'tarjeta-lugar group block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition';
+    card.className = 'tarjeta-lugar group block rounded-lg overflow-hidden';
 
     card.setAttribute('data-ciudad', lugar.ciudad || '');
     card.setAttribute('data-categoria', lugar.categoria || '');
