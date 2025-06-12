@@ -1,22 +1,27 @@
 const DAO = require('./dao');
-const db = new DAO().getDb();
+const dao = new DAO();
+const db = dao.getDb();
 const { v4: uuidv4 } = require('uuid');
 
 class LugarModel {
   obtenerLugares() {
     const sql = `
-      SELECT 
-        l.id, l.titulo, l.descripcion,
-        d.ciudad, dp.precio,
-        mp.nombre AS modalidad, c.nombre AS categoria,
-        COALESCE(f.url, '') AS url
+      SELECT
+        l.id,
+        l.titulo,
+        l.descripcion,
+        d.ciudad,
+        dp.precio,
+        mp.nombre AS modalidad,
+        c.nombre AS categoria,
+        COALESCE(MIN(f.url), '') AS url
       FROM lugar l
       JOIN direccion d ON l.direccion_id = d.id
       JOIN detalleprecio dp ON dp.lugar_id = l.id
       JOIN modalidadprecio mp ON dp.modalidad_id = mp.id
       JOIN categorialugar c ON l.categoria_id = c.id
       LEFT JOIN fotolugar f ON f.lugar_id = l.id
-      GROUP BY l.id, d.ciudad, dp.precio, mp.nombre, c.nombre, f.url
+      GROUP BY l.id, d.ciudad, dp.precio, mp.nombre, c.nombre
       ORDER BY l.created_at DESC;
     `;
     return db.any(sql);
@@ -25,11 +30,24 @@ class LugarModel {
   async obtenerLugarPorId(id) {
     const sql = `
       SELECT
-        l.id, l.titulo, l.descripcion, l.capacidad, l.tamano_m2,
-        d.ciudad, d.calle, d.numero, d.referencia,
-        dp.precio, mp.nombre AS modalidad, c.nombre AS categoria,
-        u.nombre AS propietario, u.email AS propietario_email, u.telefono AS propietario_telefono,
-        l.latitud, l.longitud, COALESCE(f.url, '') AS url
+        l.id,
+        l.titulo,
+        l.descripcion,
+        l.capacidad,
+        l.tamano_m2,
+        d.ciudad,
+        d.calle,
+        d.numero,
+        d.referencia,
+        dp.precio,
+        mp.nombre AS modalidad,
+        c.nombre AS categoria,
+        u.nombre AS propietario,
+        u.email AS propietario_email,
+        u.telefono AS propietario_telefono,
+        l.latitud,
+        l.longitud,
+        COALESCE(MIN(f.url), '') AS url
       FROM lugar l
       JOIN direccion d ON l.direccion_id = d.id
       JOIN detalleprecio dp ON dp.lugar_id = l.id
@@ -40,7 +58,7 @@ class LugarModel {
       WHERE l.id = $1
       GROUP BY l.id, d.ciudad, d.calle, d.numero, d.referencia,
                dp.precio, mp.nombre, c.nombre, u.nombre, u.email, u.telefono,
-               l.latitud, l.longitud, f.url;
+               l.latitud, l.longitud;
     `;
     const results = await db.any(sql, [id]);
     return results.length > 0 ? results[0] : null;
@@ -66,7 +84,7 @@ class LugarModel {
 }
 
   async crearLugar(data) {
-    return db.tx(async t => {
+    return dao.transaccion(async t => {
       const direccionId = uuidv4();
       await t.none(`
         INSERT INTO direccion(id, ciudad, calle, numero, referencia)

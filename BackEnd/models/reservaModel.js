@@ -1,6 +1,5 @@
 const DAO = require('./dao');
 const dao = new DAO();
-const db = dao.getDb();
 
 class ReservaModel {
   async crearReserva(data) {
@@ -14,7 +13,7 @@ class ReservaModel {
       data.total
     ];
 
-    return db.tx(async t => {
+    return dao.transaccion(async t => {
       const result = await t.one(
         `INSERT INTO Reserva (
            id, usuario_id, lugar_id, tipo_evento_id,
@@ -33,7 +32,7 @@ class ReservaModel {
       FROM Reserva
       WHERE lugar_id = $1 AND estado IN ('pendiente', 'confirmada')
     `;
-    return await db.consultar(sql, [lugarId]);
+    return await dao.consultar(sql, [lugarId]);
   }
 
   async obtenerPorCliente(clienteId) {
@@ -52,7 +51,7 @@ class ReservaModel {
     WHERE r.usuario_id = $1
     ORDER BY r.fecha_inicio DESC
   `;
-  return await db.consultar(sql, [clienteId]);
+  return await dao.consultar(sql, [clienteId]);
 }
 
   async obtenerTodas() {
@@ -71,7 +70,7 @@ class ReservaModel {
       JOIN Lugar l   ON r.lugar_id  = l.id
       ORDER BY r.fecha_inicio DESC
     `;
-    return await db.consultar(sql);
+    return await dao.consultar(sql);
   }
 }
 

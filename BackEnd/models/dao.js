@@ -13,6 +13,13 @@ class DAO {
     return db.any(sql, params);
   }
 
+  transaccion(fn) {
+    return db.tx(fn).catch(err => {
+      console.error('Rollback transacción:', err.message);
+      throw err;
+    });
+  }
+
   getDb() {
     return db;
   }
