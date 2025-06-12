@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
-const db = require('../db'); 
+const DAO = require('../models/dao');
+const db = new DAO().getDb();
 
 const JWT_SECRET = process.env.JWT_SECRET || 'tu_clave_secreta_aqui';
 
@@ -14,15 +15,15 @@ module.exports = async (req, res, next) => {
   try {
     const payload = jwt.verify(token, JWT_SECRET);
     
-    const { rows } = await db.query('SELECT nombre FROM "Usuario" WHERE id = $1', [payload.id]);
-    if (!rows.length) {
+    const row = await db.oneOrNone('SELECT nombre FROM "Usuario" WHERE id = $1', [payload.id]);
+    if (!row) {
       return res.status(401).json({ error: 'Usuario no encontrado.' });
     }
 
     req.user = {
       id: payload.id,
       email: payload.email,
-      nombre: rows[0].nombre 
+      nombre: row.nombre
     };
 
     next();
