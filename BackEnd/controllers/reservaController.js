@@ -34,5 +34,15 @@ module.exports = {
     console.error(error);
     res.status(500).json({ error: 'Error al obtener reservas del cliente' });
   }
-}
+  },
+
+  async listarReservas(req, res) {
+    try {
+      const reservas = await reservaModel.obtenerTodas();
+      res.json({ success: true, data: reservas });
+    } catch (error) {
+      console.error('Error al listar reservas:', error);
+      res.status(500).json({ success: false, message: 'Error al listar reservas' });
+    }
+  }
 };

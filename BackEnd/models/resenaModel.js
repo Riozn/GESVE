@@ -41,6 +41,25 @@ class ResenaModel {
     const { rows } = await db.query(qr, [lugar_id]);
     return rows;
   }
+
+  static async listarTodas() {
+    const qr = `
+      SELECT
+        r.id,
+        r.puntuacion,
+        r.comentario,
+        r.fecha,
+        u.nombre AS usuario,
+        l.titulo AS lugar
+      FROM "Reseña" r
+      LEFT JOIN "Reserva" res ON res.id = r.reserva_id
+      LEFT JOIN "Lugar"   l   ON res.lugar_id = l.id
+      JOIN "Usuario" u     ON u.id   = r.usuario_id
+      ORDER BY r.fecha DESC
+    `;
+    const { rows } = await db.query(qr);
+    return rows;
+  }
 }
 
 module.exports = ResenaModel;

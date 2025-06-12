@@ -33,3 +33,13 @@ exports.obtenerResenas = async (req, res) => {
     res.status(500).json({ error: 'Error al obtener reseñas.' });
   }
 };
+
+exports.listarResenas = async (req, res) => {
+  try {
+    const lista = await ResenaModel.listarTodas();
+    res.json({ success: true, data: lista });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Error al listar reseñas.' });
+  }
+};

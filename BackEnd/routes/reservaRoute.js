@@ -6,5 +6,6 @@ const authMiddleware = require('../middlewares/authMiddleware');
 router.post('/', reservaController.crearReserva);
 router.get('/lugar/:lugarId', reservaController.obtenerReservasPorLugar);
 router.get('/cliente/mis-reservas', authMiddleware, reservaController.obtenerReservasDelCliente);
+router.get('/', reservaController.listarReservas);
 
 module.exports = router;

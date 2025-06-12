@@ -79,5 +79,15 @@ module.exports = {
       console.error('Error al registrar pago:', error);
       res.status(500).json({ success: false, message: 'Error interno del servidor' });
     }
+  },
+
+  listarPagos: async (req, res) => {
+    try {
+      const pagos = await pagoModel.obtenerTodos();
+      res.json({ success: true, data: pagos });
+    } catch (error) {
+      console.error('Error al listar pagos:', error);
+      res.status(500).json({ success: false, message: 'Error interno del servidor' });
+    }
   }
 };

@@ -62,6 +62,10 @@
     <script src="../public/js/adminUsuarios.js"></script>
     <script src="../public/js/adminLugares.js"></script>
     <script src="../public/js/adminCategorias.js"></script>
+    <script src="../public/js/adminReservas.js"></script>
+    <script src="../public/js/adminResenas.js"></script>
+    <script src="../public/js/adminTipos.js"></script>
+    <script src="../public/js/adminPagos.js"></script>
 
     <script>
       // Seguridad: solo admins
@@ -79,10 +83,13 @@
       const sidebarLinks = document.querySelectorAll("#sidebar nav a");
       const tituloModulo = document.getElementById("tituloModulo");
       const moduloLoaders = {
-        usuarios: window.cargarModuloUsuarios,
-        lugares:  window.cargarModuloLugares,
-        categorias: window.cargarModuloCategorias,
-        // aquí podrás añadir reservas, reseñas, etc.
+        usuarios:  window.cargarModuloUsuarios,
+        lugares:   window.cargarModuloLugares,
+        reservas:  window.cargarModuloReservas,
+        resenas:   window.cargarModuloResenas,
+        categorias:window.cargarModuloCategorias,
+        tipos:     window.cargarModuloTipos,
+        pagos:     window.cargarModuloPagos
       };
 
       sidebarLinks.forEach(link => {
