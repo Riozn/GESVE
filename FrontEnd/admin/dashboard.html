@@ -67,17 +67,9 @@
     <script src="../public/js/adminTipos.js"></script>
     <script src="../public/js/adminPagos.js"></script>
 
+    <script src="navbarAdmin.js"></script>
     <script>
-      // Seguridad: solo admins
-      const usuario = JSON.parse(localStorage.getItem("usuario"));
-      if (!usuario || usuario.rol !== "admin") {
-        window.location.href = "/";
-      }
-      // Logout
-      document.getElementById("cerrarSesionBtn").onclick = () => {
-        localStorage.clear();
-        window.location.href = "auth.html";
-      };
+      window.setupAdmin();
 
       // Sidebar dinámico
       const sidebarLinks = document.querySelectorAll("#sidebar nav a");
