@@ -45,7 +45,7 @@ module.exports = {
   login: async (req, res) => {
     try {
       const { email, contrasena } = req.body;
-      const rows = await db.consultar('SELECT * FROM Usuario WHERE email = $1', [email]);
+      const rows = await dao.consultar('SELECT * FROM Usuario WHERE email = $1', [email]);
       if (rows.length === 0) {
         return res.status(401).json({ error: 'Credenciales inválidas' });
       }

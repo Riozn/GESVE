@@ -5,7 +5,7 @@ module.exports = {
   obtenerLugares: async (req, res) => {
     try {
       const lugares = await lugarModel.obtenerLugares();
-      return res.json(lugares);
+      return res.json({ success: true, data: lugares });
     } catch (error) {
       console.error('Error al obtener lugares:', error);
       return res.status(500).json({ error: 'Error interno del servidor' });

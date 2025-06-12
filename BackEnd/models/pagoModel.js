@@ -1,6 +1,5 @@
 const DAO = require('./dao');
 const dao = new DAO();
-const db = dao.getDb();
 
 class PagoModel {
   async registrarPago({ reserva_id, monto, imagen_pago, es_pago_completo }) {
@@ -22,7 +21,7 @@ class PagoModel {
   }
 
   async registrarPagoConTransacciones(pago, transacciones) {
-    return db.tx(async t => {
+    return dao.transaccion(async t => {
       await t.none(
         `INSERT INTO Pago (id, reserva_id, imagen_pago, monto, fecha_pago, es_pago_completo)
          VALUES (uuid_generate_v4(), $1, $2, $3, CURRENT_DATE, $4)`,
