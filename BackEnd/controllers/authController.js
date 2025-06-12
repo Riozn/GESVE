@@ -5,10 +5,14 @@ const DAO = require('../models/dao');
 const dao = new DAO();
 const db = dao.getDb();
 
-const SECRET = 'CLAVESECRETA';
+const { JWT_SECRET } = require('../config');
 
 function generarToken(usuario) {
-  return jwt.sign({ id: usuario.id, nombre: usuario.nombre, rol: usuario.rol }, SECRET, { expiresIn: '2h' });
+  return jwt.sign(
+    { id: usuario.id, nombre: usuario.nombre, rol: usuario.rol },
+    JWT_SECRET,
+    { expiresIn: '2h' }
+  );
 }
 
 module.exports = {

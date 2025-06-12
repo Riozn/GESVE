@@ -2,11 +2,11 @@ const jwt = require('jsonwebtoken');
 const DAO = require('../models/dao');
 const db = new DAO().getDb();
 
-const JWT_SECRET = process.env.JWT_SECRET || 'tu_clave_secreta_aqui';
+const { JWT_SECRET } = require('../config');
+const getToken = require('../helpers/getToken');
 
 module.exports = async (req, res, next) => {
-  const authHeader = req.headers.authorization || '';
-  const token = authHeader.replace(/^Bearer\s+/i, '');
+  const token = getToken(req);
 
   if (!token) {
     return res.status(401).json({ error: 'Falta token de autorización.' });

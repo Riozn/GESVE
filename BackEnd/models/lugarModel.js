@@ -66,16 +66,16 @@ class LugarModel {
 
  async obtenerResenasPorLugar(lugarId) {
   const sql = `
-    SELECT 
-      r.puntuacion, 
-      r.comentario, 
-      r.fecha, 
+    SELECT
+      r.puntuacion,
+      r.comentario,
+      r.fecha,
       u.nombre AS usuario
-    FROM reseña r
-    JOIN usuario u ON r.usuario_id = u.id
+    FROM "Reseña" r
+    JOIN "Usuario" u ON r.usuario_id = u.id
     WHERE r.reserva_id IN (
-      SELECT id 
-      FROM reserva 
+      SELECT id
+      FROM "Reserva"
       WHERE lugar_id = $1
     )
     ORDER BY r.fecha DESC;
