@@ -38,6 +38,25 @@ class PagoModel {
       }
     });
   }
+
+  async obtenerTodos() {
+    const sql = `
+      SELECT
+        p.id,
+        p.monto,
+        p.fecha_pago,
+        p.es_pago_completo,
+        r.id AS reserva_id,
+        u.nombre AS cliente,
+        l.titulo AS lugar
+      FROM Pago p
+      JOIN Reserva r ON p.reserva_id = r.id
+      JOIN Usuario u ON r.usuario_id = u.id
+      JOIN Lugar l   ON r.lugar_id  = l.id
+      ORDER BY p.fecha_pago DESC
+    `;
+    return dao.consultar(sql);
+  }
 }
 
 module.exports = PagoModel;

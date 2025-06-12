@@ -54,6 +54,25 @@ class ReservaModel {
   `;
   return await db.consultar(sql, [clienteId]);
 }
+
+  async obtenerTodas() {
+    const sql = `
+      SELECT
+        r.id,
+        r.fecha_inicio,
+        r.fecha_fin,
+        r.cantidad,
+        r.total,
+        r.estado,
+        u.nombre AS cliente,
+        l.titulo AS lugar
+      FROM Reserva r
+      JOIN Usuario u ON r.usuario_id = u.id
+      JOIN Lugar l   ON r.lugar_id  = l.id
+      ORDER BY r.fecha_inicio DESC
+    `;
+    return await db.consultar(sql);
+  }
 }
 
 module.exports = ReservaModel;
