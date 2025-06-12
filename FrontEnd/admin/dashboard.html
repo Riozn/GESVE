@@ -61,6 +61,7 @@
     <!-- Carga los scripts globales de cada módulo -->
     <script src="../public/js/adminUsuarios.js"></script>
     <script src="../public/js/adminLugares.js"></script>
+    <script src="../public/js/adminCategorias.js"></script>
 
     <script>
       // Seguridad: solo admins
@@ -80,6 +81,7 @@
       const moduloLoaders = {
         usuarios: window.cargarModuloUsuarios,
         lugares:  window.cargarModuloLugares,
+        categorias: window.cargarModuloCategorias,
         // aquí podrás añadir reservas, reseñas, etc.
       };
 

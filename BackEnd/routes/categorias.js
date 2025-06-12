@@ -1,16 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const DAO = require('../models/dao');
-const db = new DAO().getDb();
+const categoriasController = require('../controllers/categoriasController');
 
-router.get('/', async (req, res) => {
-  try {
-    const categorias = await db.any('SELECT id, nombre FROM categorialugar ORDER BY nombre');
-    res.json(categorias);
-  } catch (err) {
-    console.error('Error al obtener categorías:', err);
-    res.status(500).json({ error: 'Error al obtener categorías' });
-  }
-});
+router.get('/', categoriasController.obtenerCategorias);
+router.post('/', categoriasController.crearCategoria);
+router.put('/:id', categoriasController.actualizarCategoria);
+router.delete('/:id', categoriasController.eliminarCategoria);
 
 module.exports = router;
