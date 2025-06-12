@@ -1,13 +1,9 @@
 const DAO = require('./dao');
-const db = new DAO();
+const dao = new DAO();
+const db = dao.getDb();
 
 class ReservaModel {
   async crearReserva(data) {
-    const sql = `
-      INSERT INTO Reserva (id, usuario_id, lugar_id, tipo_evento_id, fecha_inicio, fecha_fin, estado, cantidad, total, created_at)
-      VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5, 'pendiente', $6, $7, CURRENT_DATE)
-      RETURNING id;
-    `;
     const params = [
       data.usuario_id,
       data.lugar_id,
@@ -17,8 +13,18 @@ class ReservaModel {
       data.cantidad,
       data.total
     ];
-    const result = await db.consultar(sql, params);
-    return result[0];
+
+    return db.tx(async t => {
+      const result = await t.one(
+        `INSERT INTO Reserva (
+           id, usuario_id, lugar_id, tipo_evento_id,
+           fecha_inicio, fecha_fin, estado, cantidad, total, created_at)
+         VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5, 'pendiente', $6, $7, CURRENT_DATE)
+         RETURNING id`,
+        params
+      );
+      return result;
+    });
   }
 
   async obtenerReservasPorLugar(lugarId) {
