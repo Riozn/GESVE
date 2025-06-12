@@ -62,22 +62,23 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     // Cargar categorías dinámicamente desde /api/categorias
-    async function cargarCategorias() {
-      try {
-        const res = await fetch('/api/categorias');
-        const categorias = await res.json();
-        const select = document.getElementById('categoria');
+      async function cargarCategorias() {
+        try {
+          const res = await fetch('/api/categorias');
+          const result = await res.json();
+          const categorias = result.data || result;
+          const select = document.getElementById('categoria');
 
-        categorias.forEach(cat => {
-          const option = document.createElement('option');
-          option.value = cat.id;
-          option.textContent = cat.nombre;
-          select.appendChild(option);
-        });
-      } catch (error) {
-        console.error('Error al cargar categorías:', error);
+          categorias.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat.id;
+            option.textContent = cat.nombre;
+            select.appendChild(option);
+          });
+        } catch (error) {
+          console.error('Error al cargar categorías:', error);
+        }
       }
-    }
 
     // Cargar ID del usuario desde localStorage (simulado)
     function cargarUsuario() {

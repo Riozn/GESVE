@@ -13,6 +13,7 @@ const authRoute       = require('./routes/authRoute');
 const categoriasRoute = require('./routes/categorias');
 const propietarioRoute = require('./routes/propietarioRoute');
 const usuarioRoute = require('./routes/usuarioRoute');
+const resenaRoute     = require('./routes/resenaRoute');
 app.use('/uploads', express.static(path.join(__dirname, '../FrontEnd/public/uploads')));
 
 app.use('/lugar', lugarRoute);
@@ -23,6 +24,7 @@ app.use('/api/auth', authRoute);
 app.use('/api/categorias', categoriasRoute);
 app.use('/api/propietario', propietarioRoute);
 app.use('/api/usuarios', usuarioRoute);
+app.use('/api/resenas', resenaRoute);
 
 app.use(express.static(path.join(__dirname, '../FrontEnd')));
 

@@ -1,4 +1,5 @@
 const ResenaModel = require('../models/resenaModel');
+const resenaModel = new ResenaModel();
 
 exports.crearResena = async (req, res) => {
   try {
@@ -9,7 +10,7 @@ exports.crearResena = async (req, res) => {
       return res.status(400).json({ error: 'Faltan campos obligatorios.' });
     }
 
-    const nueva = await ResenaModel.crear({
+    const nueva = await resenaModel.crear({
       usuario_id,
       lugar_id,
       puntuacion: parseInt(puntuacion, 10),
@@ -26,7 +27,7 @@ exports.crearResena = async (req, res) => {
 exports.obtenerResenas = async (req, res) => {
   try {
     const { lugarId } = req.params;
-    const lista = await ResenaModel.listarPorLugar(lugarId);
+    const lista = await resenaModel.listarPorLugar(lugarId);
     res.json(lista);
   } catch (err) {
     console.error(err);
@@ -36,7 +37,7 @@ exports.obtenerResenas = async (req, res) => {
 
 exports.listarResenas = async (req, res) => {
   try {
-    const lista = await ResenaModel.listarTodas();
+    const lista = await resenaModel.listarTodas();
     res.json({ success: true, data: lista });
   } catch (err) {
     console.error(err);
