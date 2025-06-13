@@ -14,7 +14,7 @@ module.exports = async (req, res, next) => {
 
   try {
     const payload = jwt.verify(token, JWT_SECRET);
-    
+
     const row = await db.oneOrNone('SELECT nombre FROM "Usuario" WHERE id = $1', [payload.id]);
     if (!row) {
       return res.status(401).json({ error: 'Usuario no encontrado.' });
@@ -28,7 +28,10 @@ module.exports = async (req, res, next) => {
 
     next();
   } catch (err) {
-    console.error('JWT Error:', err);
-    return res.status(401).json({ error: 'Token inválido o expirado.' });
+    console.error('Auth error:', err);
+    if (err.name === 'JsonWebTokenError' || err.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Token inválido o expirado.' });
+    }
+    return res.status(500).json({ error: 'Error al validar token.' });
   }
 };
