@@ -1,6 +1,19 @@
 function getToken(req) {
   const header = (req.headers.authorization || '').trim();
-  const match = header.match(/^Bearer\s+(.+)$/i);
-  return match ? match[1] : header;
+  let token = '';
+  if (header) {
+    const match = header.match(/^(Bearer|Token)\s+(.+)$/i);
+    token = match ? match[2] : header;
+  }
+
+  if (!token && req.query.token) {
+    token = req.query.token;
+  }
+
+  if (!token && req.cookies) {
+    token = req.cookies.token || '';
+  }
+
+  return token;
 }
 module.exports = getToken;
